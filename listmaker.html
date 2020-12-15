@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listmaker</title>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script src="./node_modules/buefy/dist/buefy.min.js"></script>
+    <link rel="stylesheet" href="./node_modules/buefy/dist/buefy.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Coustard:wght@900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+    <div class="columns is-fluid has-background-grey" style="padding:12px 10px">
+        <div class="column is-one-fifth">
+            <b-field>
+                <b-input v-model="text" id="inp" type="textarea"></b-input>
+            </b-field>
+        </div>
+        <div class="column">
+            <b-field>
+                <b-input style="height:100vh;" id="outp" :value="list" disabled type="textarea"></b-input>
+            </b-field>
+        </div>
+    </div>
+    <b-collapse class="bottomNav has-background-info" :open="false" position="is-bottom" class="card" animation="slide"
+                aria-id="contentIdForA11y3">
+        <div
+                slot="trigger"
+                slot-scope="props"
+                class="card-header"
+                role="button"
+                aria-controls="contentIdForA11y3">
+
+            <div class="card-header-title columns" @click="$event.stopPropagation()" style="     min-height: 120px;">
+                <div class="column is-half" style="margin-top:12px">
+                    <div class="columns">
+                        <div class="column is-2 box is-marginless"
+                             style="text-align: center; margin-right: 12px !important">
+                            <b-switch v-model="withQuote" type="is-success">
+                                <span class="marks has-background-white	" style="padding:0 8px">{{quote_mark}} {{quote_mark}}</span>
+                            </b-switch>
+                        </div>
+
+                        <div class="column is-2 box is-marginless"
+                             style="text-align: center; margin-right: 12px !important">
+                            <b-switch v-model="isSorting" type="is-success">
+                                <b-icon pack="fas" icon="sort-alpha-up"></b-icon>
+                            </b-switch>
+                        </div>
+                        <div class="column is-2 box is-marginless"
+                             style="text-align: center; margin-right: 12px !important">
+                            <b-switch v-model="isUnique" type="is-success">
+                                <b-icon pack="fas" icon="dice-one"></b-icon>
+                            </b-switch>
+                        </div>
+
+                        <div class="column is-1 box" style="text-align: center; margin-right: 12px !important">
+                            <span class="marks has-background-white	" style="padding:0 8px">{{separator_mark}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-half is-paddingless" >
+                    <div v-if="isNumeric">
+                        <div class="box is-marginless is-pulled-right has-text-danger"
+                             style="text-align: center; margin-right: 12px !important">
+                            sum:
+                            {{sum}}
+                        </div>
+                        <div class="box is-marginless is-pulled-right has-text-danger"
+                             style="text-align: center; margin-right: 12px !important">
+                            avg
+                            {{avg}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a class="card-header-icon">
+                <b-icon
+                        pack="fas"
+                        icon="cog">
+                </b-icon>
+            </a>
+        </div>
+        <footer class="card-footer columns ">
+            <div class="column is-one-fifth tile">
+                <div class="tile is-parent is-vertical">
+                    <article class="tile is-child notification is-primary">
+                        <div class="field">
+                            <b-radio v-model="separator_mark"
+                                     native-value=","
+                                     type="is-danger">
+                                <span class="marks">,</span>
+                            </b-radio>
+                        </div>
+                        <div class="field">
+                            <b-radio v-model="separator_mark"
+                                     native-value=";"
+                                     type="is-danger">
+                                <span class="marks">;</span>
+                            </b-radio>
+                        </div>
+                        <div class="field">
+                            <b-radio v-model="separator_mark"
+                                     native-value="|"
+                                     type="is-danger">
+                                <span class="marks">|</span>
+                            </b-radio>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="column is-one-fifth">
+                <div class="tile is-parent is-vertical">
+                    <article class="tile is-child notification is-primary">
+                        <div class="field">
+                            <b-radio v-model="quote_mark"
+                                     native-value="'"
+                                     type="is-danger">
+                                <span class="marks">'</span>
+                            </b-radio>
+                        </div>
+                        <div class="field">
+                            <b-radio v-model="quote_mark"
+                                     native-value="&quot;"
+                                     type="is-danger">
+                                <span class="marks">"</span>
+                            </b-radio>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </footer>
+    </b-collapse>
+
+</div>
+<script src="./main.js"></script>
+<style>
+    .bottomNav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 0 12px;
+
+    }
+
+    .marks {
+        font-family: 'Coustard', serif;
+        font-size: 18px;
+    }
+
+    .dropdown-content {
+        width: 64px;
+    }
+
+    #inp {
+        height: 900px;
+    }
+    #outp{
+        height: 300px;
+    }
+</style>
+</body>
+</html>
