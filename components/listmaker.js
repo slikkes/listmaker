@@ -27,11 +27,11 @@ Vue.component ('list-maker', {
           <div class="column is-half" style="margin-top:12px">
             <div class="columns">
               <footer-switch :label="quote_mark+ ' ' + quote_mark" @updated="withQuote = $event"
-                             class="column is-2 box is-marginless footer-switch-wrapper"></footer-switch>
+                             class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
               <footer-switch icon="sort-alpha-up" @updated="isSorting = $event"
-                             class="column is-2 box is-marginless footer-switch-wrapper"></footer-switch>
+                             class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
               <footer-switch icon="dice-one" @updated="isUnique = $event"
-                             class="column is-2 box is-marginless footer-switch-wrapper"></footer-switch>
+                             class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
               <div class="column is-1 box" style="text-align: center; margin-right: 12px !important">
                 <span class="marks has-background-white\t" style="padding:0 8px">{{ separator_mark }}</span>
               </div>
@@ -60,12 +60,8 @@ Vue.component ('list-maker', {
         </a>
       </div>
       <footer class="card-footer columns ">
-        <div class="column is-one-fifth">
-          <footer-radio-menu :items="footer_opts.separator" @updated="separator_mark = $event"></footer-radio-menu>
-        </div>
-        <div class="column is-one-fifth">
-          <footer-radio-menu :items="footer_opts.quote" @updated="quote_mark = $event"></footer-radio-menu>
-        </div>
+          <footer-radio-menu :items="footer_opts.separator" @updated="separator_mark = $event" class="column is-one-fifth"></footer-radio-menu>
+          <footer-radio-menu :items="footer_opts.quote" @updated="quote_mark = $event" class="column is-one-fifth" ></footer-radio-menu>
       </footer>
     </b-collapse>
     </div>

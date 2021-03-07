@@ -11,7 +11,7 @@
     font-size: 18px;
 }
 
-#list-maker .dropdown-content {
+.dropdown-content {
     width: 64px;
 }
 
@@ -23,7 +23,11 @@
     height: 300px;
 }
 
-.footer-switch-wrapper {
+.footer-item-wrapper {
     text-align: center;
-    margin-right: 12px !important
+    margin-right: 12px !important;
+    margin-bottom: 0px !important;
+    align-items: center;
+    justify-content: space-evenly;
+    display: flex;
 }

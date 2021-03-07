@@ -43,15 +43,19 @@ Vue.component ('table-extract', {
 
         <div class="card-header-title columns" @click="$event.stopPropagation()" style="     min-height: 120px;">
           <div class="column is-half" style="margin-top:12px">
-            <div class="columns">
-              <div class="column is-1 box" style="text-align: center; margin-right: 12px !important">
-                <input v-model="delimiters.col" class="input " type="text" placeholder="Large input">
+            <div class="columns ">
+              <footer-switch icon="heading" @updated="withHeader = $event"
+                             class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
+              
+              <div class="column is-2 box footer-item-wrapper">
+                <span class="tag is-info">{{ getLabel ("col") }}</span>
                 <b-icon pack="fas" icon="columns"></b-icon>
               </div>
-              <div class="column is-1 box" style="text-align: center; margin-right: 12px !important">
-                <input v-model="delimiters.line" class="input " type="text" placeholder="Large input">
+              <div class="column is-2 box footer-item-wrapper">
+                <span class="tag is-info">{{ getLabel ("line") }}</span>
                 <b-icon pack="fas" icon="step-forward"></b-icon>
               </div>
+              
             </div>
           </div>
         </div>
@@ -63,65 +67,35 @@ Vue.component ('table-extract', {
         </a>
       </div>
       <footer class="card-footer columns ">
-        <!--        <div class="column is-one-fifth tile">
-                  <div class="tile is-parent is-vertical">
-                    <article class="tile is-child notification is-primary">
-                      <div class="field">
-                        <b-radio v-model="separator_mark"
-                                 native-value=","
-                                 type="is-danger">
-                          <span class="marks">,</span>
-                        </b-radio>
-                      </div>
-                      <div class="field">
-                        <b-radio v-model="separator_mark"
-                                 native-value=";"
-                                 type="is-danger">
-                          <span class="marks">;</span>
-                        </b-radio>
-                      </div>
-                      <div class="field">
-                        <b-radio v-model="separator_mark"
-                                 native-value="|"
-                                 type="is-danger">
-                          <span class="marks">|</span>
-                        </b-radio>
-                      </div>
-                    </article>
-                  </div>
-                </div>
-                <div class="column is-one-fifth">
-                  <div class="tile is-parent is-vertical">
-                    <article class="tile is-child notification is-primary">
-                      <div class="field">
-                        <b-radio v-model="quote_mark"
-                                 native-value="'"
-                                 type="is-danger">
-                          <span class="marks">'</span>
-                        </b-radio>
-                      </div>
-                      <div class="field">
-                        <b-radio v-model="quote_mark"
-                                 native-value="&quot;"
-                                 type="is-danger">
-                          <span class="marks">"</span>
-                        </b-radio>
-                      </div>
-                    </article>
-                  </div>
-                </div>-->
+        <footer-radio-menu :items="footer_opts.col" @updated="delimiters.col = $event"
+                           class="column is-one-fifth"></footer-radio-menu>
+        <footer-radio-menu :items="footer_opts.line" @updated="delimiters.line = $event"
+                           class="column is-one-fifth"></footer-radio-menu>
       </footer>
     </b-collapse>
     </div>
   `,
+  mounted() {
+    this.delimiters.col = this.footer_opts.col[0].value
+    this.delimiters.line = this.footer_opts.line[0].value
+    
+    let stored = localStorage.te_tableRaw;
+    if (stored) {
+      this.tableRaw = stored;
+    }
+  },
   data() {
     return {
       tableRaw: null,
       delimiters: {
-        col: '\t',
-        line: '\n'
+        col: null,
+        line: null
       },
-      withHeader: false
+      withHeader: false,
+      footer_opts: {
+        col: [{value: '\t', label: '\\t'}, {value: ' ', label: 'space'}, {value: ',', label: ','}],
+        line: [{value: '\n', label: '\\n'}],
+      }
     }
   },
   computed: {
@@ -140,6 +114,10 @@ Vue.component ('table-extract', {
         .map (line => line.split (this.delimiters.col)[colNum + 1]);
     },
     
+    getLabel(type) {
+      return this.footer_opts[type].find (i => i.value === this.delimiters[type])?.label;
+    },
+    
     getColSum(colNum) {
       return this.getCols (colNum).reduce ((c, i) => c + parseFloat (i), 0);
     },
@@ -147,6 +125,11 @@ Vue.component ('table-extract', {
     getColAvg(colNum) {
       let col = this.getCols (colNum);
       return col.reduce ((c, i) => c + parseFloat (i), 0) / col.length;
+    }
+  },
+  watch: {
+    tableRaw: function (val) {
+      localStorage.setItem ("te_tableRaw", val)
     }
   }
 })
