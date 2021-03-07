@@ -31,3 +31,7 @@
     justify-content: space-evenly;
     display: flex;
 }
+
+.selectedCol{
+    background-color: rgb(164, 217, 111)
+}

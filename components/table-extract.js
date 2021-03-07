@@ -1,6 +1,6 @@
 Vue.component ('table-extract', {
   template: `
-    <div>
+    <div id="table-extract">
     <div class="columns is-fluid has-background-grey" style="padding:12px 10px">
       <div class="column is-one-fifth">
         <b-field>
@@ -8,18 +8,27 @@ Vue.component ('table-extract', {
         </b-field>
       </div>
       <div class="column">
-        <table class="table is-bordered is-striped">
+
+        <table class="table is-bordered ">
           <thead>
           <tr v-if="withHeader">
             <th v-for="header in tableData.header">{{ header }}</th>
           </tr>
           </thead>
+
           <tbody>
           <tr v-for="row in tableData.lines">
-            <td v-for="field in row">{{ field }}</td>
+            <td v-for="(field, idx) in row" @click="selectedCol = idx"
+                :class="selectedCol === idx ? 'selectedCol' : ''">
+              {{ field }}
+            </td>
           </tr>
           </tbody>
         </table>
+
+        <div class="column">
+          <list-output :list-data="selectedColData" :format="listFormat"></list-output>
+        </div>
       </div>
     </div>
     <b-collapse class="has-background-info card bottomNav " :open="false" position="is-bottom" animation="slide"
@@ -85,7 +94,8 @@ Vue.component ('table-extract', {
       footer_opts: {
         col: [{value: '\t', label: '\\t'}, {value: ' ', label: 'space'}, {value: ',', label: ','}],
         line: [{value: '\n', label: '\\n'}],
-      }
+      },
+      selectedCol: null,
     }
   },
   computed: {
@@ -104,13 +114,23 @@ Vue.component ('table-extract', {
         lines: data
       }
     },
-    tableHeader() {
-      if (!this.withHeader) {
+    selectedColData() {
+      if (this.selectedCol === null) {
         return [];
       }
+      return this.tableData.lines.reduce ((c, i) => {
+        return [...c, i[this.selectedCol]];
+      }, [])
       
-      
-    }
+    },
+    listFormat() {
+      return {withQuote: true
+        /*isUnique: false,
+        withQuote: false,
+        isSorting: false,
+        separator_mark: '',*/
+      }
+    },
   },
   methods: {
     

@@ -9,9 +9,7 @@ Vue.component ('list-maker', {
         </b-field>
       </div>
       <div class="column">
-        <b-field>
-          <b-input style="height:100vh;" id="outp" :value="list" disabled type="textarea"></b-input>
-        </b-field>
+        <list-output :list-data="listData" :format="listFormat"></list-output>
       </div>
     </div>
     <b-collapse class="has-background-info card bottomNav " :open="false" position="is-bottom" animation="slide"
@@ -26,14 +24,14 @@ Vue.component ('list-maker', {
         <div class="card-header-title columns" @click="$event.stopPropagation()" style="     min-height: 120px;">
           <div class="column is-half" style="margin-top:12px">
             <div class="columns">
-              <footer-switch :label="quote_mark+ ' ' + quote_mark" @updated="withQuote = $event"
+              <footer-switch :label="quoteMark+ ' ' + quoteMark" @updated="withQuote = $event"
                              class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
               <footer-switch icon="sort-alpha-up" @updated="isSorting = $event"
                              class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
               <footer-switch icon="dice-one" @updated="isUnique = $event"
                              class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
               <div class="column is-1 box" style="text-align: center; margin-right: 12px !important">
-                <span class="marks has-background-white\t" style="padding:0 8px">{{ separator_mark }}</span>
+                <span class="marks has-background-white\t" style="padding:0 8px">{{ separatorMark }}</span>
               </div>
             </div>
           </div>
@@ -60,8 +58,10 @@ Vue.component ('list-maker', {
         </a>
       </div>
       <footer class="card-footer columns ">
-          <footer-radio-menu :items="footer_opts.separator" @updated="separator_mark = $event" class="column is-one-fifth"></footer-radio-menu>
-          <footer-radio-menu :items="footer_opts.quote" @updated="quote_mark = $event" class="column is-one-fifth" ></footer-radio-menu>
+        <footer-radio-menu :items="footer_opts.separator" @updated="separatorMark = $event"
+                           class="column is-one-fifth"></footer-radio-menu>
+        <footer-radio-menu :items="footer_opts.quote" @updated="quoteMark = $event"
+                           class="column is-one-fifth"></footer-radio-menu>
       </footer>
     </b-collapse>
     </div>
@@ -73,8 +73,8 @@ Vue.component ('list-maker', {
       withQuote: false,
       isUnique: false,
       isSorting: false,
-      separator_mark: ",",
-      quote_mark: "'",
+      separatorMark: ",",
+      quoteMark: "'",
       footer_opts: {
         separator: [{value: ',', label: ','}, {value: ';', label: ';'}, {value: '|', label: '|'}],
         quote: [{value: '\'', label: '\''}, {value: '"', label: '"'}]
@@ -88,37 +88,30 @@ Vue.component ('list-maker', {
     }
   },
   computed: {
-    list() {
-      let list = this.text.split ("\n");
-      
-      if (this.isUnique) {
-        list = [...new Set (list)];
-      }
-      
-      if (this.withQuote) {
-        list = list.map (e => `${this.quote_mark}${e}${this.quote_mark}`)
-      }
-      
-      if (this.isSorting) {
-        list = list.sort ();
-      }
-      return list.join (this.separator_mark);
+    listData() {
+      return this.text.split ("\n");
     },
-    rows() {
-      return this.list.split (this.separator_mark)
+    listFormat() {
+      return {
+        isUnique: this.isUnique,
+        withQuote: this.withQuote,
+        quoteMark: this.quoteMark,
+        isSorting: this.isSorting,
+        separatorMark: this.separatorMark,
+      }
     },
     isNumeric() {
-      return this.rows.some (e => /^\d+$/.test (e))
+      return this.listData.some (e => /^\d+$/.test (e))
     },
     sum() {
       if (this.isNumeric) {
-        return this.rows.reduce ((c, i) => c + parseFloat (i), 0).toFixed (2)
+        return this.listData.reduce ((c, i) => c + parseFloat (i), 0).toFixed (2)
       }
       
       return null
     },
     avg() {
-      return this.isNumeric ? (this.sum / this.rows.length).toFixed (2) : null
+      return this.isNumeric ? (this.sum / this.listData.length).toFixed (2) : null
     }
   },
   watch: {
