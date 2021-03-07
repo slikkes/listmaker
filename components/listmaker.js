@@ -26,27 +26,12 @@ Vue.component ('list-maker', {
         <div class="card-header-title columns" @click="$event.stopPropagation()" style="     min-height: 120px;">
           <div class="column is-half" style="margin-top:12px">
             <div class="columns">
-              <div class="column is-2 box is-marginless"
-                   style="text-align: center; margin-right: 12px !important">
-                <b-switch v-model="withQuote" type="is-success">
-                  <span class="marks has-background-white" style="padding:0 8px">{{ quote_mark }}
-                    {{ quote_mark }}</span>
-                </b-switch>
-              </div>
-
-              <div class="column is-2 box is-marginless"
-                   style="text-align: center; margin-right: 12px !important">
-                <b-switch v-model="isSorting" type="is-success">
-                  <b-icon pack="fas" icon="sort-alpha-up"></b-icon>
-                </b-switch>
-              </div>
-              <div class="column is-2 box is-marginless"
-                   style="text-align: center; margin-right: 12px !important">
-                <b-switch v-model="isUnique" type="is-success">
-                  <b-icon pack="fas" icon="dice-one"></b-icon>
-                </b-switch>
-              </div>
-
+              <footer-switch :label="quote_mark+ ' ' + quote_mark" @updated="withQuote = $event"
+                             class="column is-2 box is-marginless footer-switch-wrapper"></footer-switch>
+              <footer-switch icon="sort-alpha-up" @updated="isSorting = $event"
+                             class="column is-2 box is-marginless footer-switch-wrapper"></footer-switch>
+              <footer-switch icon="dice-one" @updated="isUnique = $event"
+                             class="column is-2 box is-marginless footer-switch-wrapper"></footer-switch>
               <div class="column is-1 box" style="text-align: center; margin-right: 12px !important">
                 <span class="marks has-background-white\t" style="padding:0 8px">{{ separator_mark }}</span>
               </div>
