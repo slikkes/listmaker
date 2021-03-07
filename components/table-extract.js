@@ -11,21 +11,11 @@ Vue.component ('table-extract', {
         <table class="table is-bordered is-striped">
           <thead>
           <tr v-if="withHeader">
-            <th><abbr title="Position">Pos</abbr></th>
-            <th>Team</th>
-            <th><abbr title="Played">Pld</abbr></th>
-            <th><abbr title="Won">W</abbr></th>
-            <th><abbr title="Drawn">D</abbr></th>
-            <th><abbr title="Lost">L</abbr></th>
-            <th><abbr title="Goals for">GF</abbr></th>
-            <th><abbr title="Goals against">GA</abbr></th>
-            <th><abbr title="Goal difference">GD</abbr></th>
-            <th><abbr title="Points">Pts</abbr></th>
-            <th>Qualification or relegation</th>
+            <th v-for="header in tableData.header">{{ header }}</th>
           </tr>
           </thead>
           <tbody>
-          <tr v-for="row in tableData">
+          <tr v-for="row in tableData.lines">
             <td v-for="field in row">{{ field }}</td>
           </tr>
           </tbody>
@@ -46,7 +36,7 @@ Vue.component ('table-extract', {
             <div class="columns ">
               <footer-switch icon="heading" @updated="withHeader = $event"
                              class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
-              
+
               <div class="column is-2 box footer-item-wrapper">
                 <span class="tag is-info">{{ getLabel ("col") }}</span>
                 <b-icon pack="fas" icon="columns"></b-icon>
@@ -55,7 +45,7 @@ Vue.component ('table-extract', {
                 <span class="tag is-info">{{ getLabel ("line") }}</span>
                 <b-icon pack="fas" icon="step-forward"></b-icon>
               </div>
-              
+
             </div>
           </div>
         </div>
@@ -103,8 +93,23 @@ Vue.component ('table-extract', {
       if (this.tableRaw === null) {
         return []
       }
-      return this.tableRaw.split (this.delimiters.line)
+      let data = this.tableRaw.split (this.delimiters.line)
         .map (line => line.split (this.delimiters.col));
+      let header = [];
+      if (this.withHeader) {
+        header = data.shift ();
+      }
+      return {
+        header: header,
+        lines: data
+      }
+    },
+    tableHeader() {
+      if (!this.withHeader) {
+        return [];
+      }
+      
+      
     }
   },
   methods: {
