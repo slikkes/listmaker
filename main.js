@@ -1,7 +1,7 @@
 var app = new Vue ({
   el: "#app",
   mounted() {
-    this.display = 'table-extractor'
+    this.display = 'list-maker'
   },
   data() {
     return {

@@ -75,52 +75,11 @@ Vue.component ('list-maker', {
         </a>
       </div>
       <footer class="card-footer columns ">
-        <div class="column is-one-fifth tile">
-          <div class="tile is-parent is-vertical">
-            <article class="tile is-child notification is-primary">
-              <div class="field">
-                <b-radio v-model="separator_mark"
-                         native-value=","
-                         type="is-danger">
-                  <span class="marks">,</span>
-                </b-radio>
-              </div>
-              <div class="field">
-                <b-radio v-model="separator_mark"
-                         native-value=";"
-                         type="is-danger">
-                  <span class="marks">;</span>
-                </b-radio>
-              </div>
-              <div class="field">
-                <b-radio v-model="separator_mark"
-                         native-value="|"
-                         type="is-danger">
-                  <span class="marks">|</span>
-                </b-radio>
-              </div>
-            </article>
-          </div>
+        <div class="column is-one-fifth">
+          <footer-radio-menu :items="footer_opts.separator" @updated="separator_mark = $event"></footer-radio-menu>
         </div>
         <div class="column is-one-fifth">
-          <div class="tile is-parent is-vertical">
-            <article class="tile is-child notification is-primary">
-              <div class="field">
-                <b-radio v-model="quote_mark"
-                         native-value="'"
-                         type="is-danger">
-                  <span class="marks">'</span>
-                </b-radio>
-              </div>
-              <div class="field">
-                <b-radio v-model="quote_mark"
-                         native-value="&quot;"
-                         type="is-danger">
-                  <span class="marks">"</span>
-                </b-radio>
-              </div>
-            </article>
-          </div>
+          <footer-radio-menu :items="footer_opts.quote" @updated="quote_mark = $event"></footer-radio-menu>
         </div>
       </footer>
     </b-collapse>
@@ -134,7 +93,11 @@ Vue.component ('list-maker', {
       isUnique: false,
       isSorting: false,
       separator_mark: ",",
-      quote_mark: "'"
+      quote_mark: "'",
+      footer_opts: {
+        separator: [{value: ',', label: ','}, {value: ';', label: ';'}, {value: '|', label: '|'}],
+        quote: [{value: '\'', label: '\''}, {value: '"', label: '"'}]
+      }
     }
   },
   mounted() {
