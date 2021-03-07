@@ -1,0 +1,23 @@
+ .bottomNav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0 12px;
+}
+
+#list-maker .marks {
+    font-family: 'Coustard', serif;
+    font-size: 18px;
+}
+
+#list-maker .dropdown-content {
+    width: 64px;
+}
+
+#inp {
+    height: 900px;
+}
+#list-maker #outp{
+    height: 300px;
+}
