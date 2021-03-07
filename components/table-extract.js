@@ -105,8 +105,8 @@ Vue.component ('table-extract', {
     </div>
   `,
   mounted() {
-    this.delimiters.col = this.footer_opts.col[0].value
-    this.delimiters.line = this.footer_opts.line[0].value
+   // this.delimiters.col = this.footer_opts.col[0].value
+   // this.delimiters.line = this.footer_opts.line[0].value
     
     let stored = localStorage["te-tableRaw"];
     if (stored) {
@@ -140,7 +140,10 @@ Vue.component ('table-extract', {
   computed: {
     tableData() {
       if (this.tableRaw === null) {
-        return []
+        return {
+          header: [],
+          lines: []
+        }
       }
       let data = this.tableRaw.split (this.delimiters.line)
         .map (line => line.split (this.delimiters.col));
@@ -162,13 +165,13 @@ Vue.component ('table-extract', {
       }, [])
     },
     selectedColSum() {
-      if(this.selectedColData.length === 0){
+      if(this.selectedCol === null){
         return 0;
       }
       return this.selectedColData.reduce ((c, i) => c + parseFloat (i), 0);
     },
     selectedColAvg() {
-      if(this.selectedColData.length === 0){
+      if(this.selectedCol === null){
         return 0;
       }
       return this.selectedColSum / this.selectedColData.length;
@@ -176,12 +179,6 @@ Vue.component ('table-extract', {
     
   },
   methods: {
-    
-    getCols(colNum) {
-      return this.table.split (this.delimiters.line)
-        .map (line => line.split (this.delimiters.col)[colNum + 1]);
-    },
-    
     getLabel(type) {
       return this.footer_opts[type].find (i => i.value === this.delimiters[type])?.label;
     },
