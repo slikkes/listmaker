@@ -105,8 +105,8 @@ Vue.component ('table-extract', {
     </div>
   `,
   mounted() {
-   // this.delimiters.col = this.footer_opts.col[0].value
-   // this.delimiters.line = this.footer_opts.line[0].value
+    this.delimiters.col = this.footer_opts.col[0].value
+    this.delimiters.line = this.footer_opts.line[0].value
     
     let stored = localStorage["te-tableRaw"];
     if (stored) {
