@@ -78,7 +78,7 @@ Vue.component ('table-extract', {
     this.delimiters.col = this.footer_opts.col[0].value
     this.delimiters.line = this.footer_opts.line[0].value
     
-    let stored = localStorage.te_tableRaw;
+    let stored = localStorage["te-tableRaw"];
     if (stored) {
       this.tableRaw = stored;
     }
@@ -124,7 +124,9 @@ Vue.component ('table-extract', {
       
     },
     listFormat() {
-      return {withQuote: true
+      return {
+        withQuote: true,
+        quoteMark: "'"
         /*isUnique: false,
         withQuote: false,
         isSorting: false,
@@ -154,7 +156,7 @@ Vue.component ('table-extract', {
   },
   watch: {
     tableRaw: function (val) {
-      localStorage.setItem ("te_tableRaw", val)
+      localStorage.setItem ("te-tableRaw", val)
     }
   }
 })

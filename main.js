@@ -2,7 +2,10 @@
 var app = new Vue ({
   el: "#app",
   mounted() {
-    this.display = 'table-extractor'
+    let stored = localStorage["mn-display"];
+    if (stored) {
+      this.display = stored;
+    }
   },
   data() {
     return {
@@ -10,5 +13,10 @@ var app = new Vue ({
     }
   },
   methods:{
+  },
+  watch: {
+    display: function (val) {
+      localStorage.setItem ("mn-display", val)
+    }
   }
 })
