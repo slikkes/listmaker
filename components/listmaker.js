@@ -24,25 +24,25 @@ Vue.component ('list-maker', {
         <div class="card-header-title columns" @click="$event.stopPropagation()" style="     min-height: 120px;">
           <div class="column is-half" style="margin-top:12px">
             <div class="columns">
-              <footer-switch :label="quoteMark+ ' ' + quoteMark" @updated="withQuote = $event"
+              <footer-switch :label="listFormat.quoteMark+ ' ' + listFormat.quoteMark" @updated="listFormat.withQuote = $event"
                              class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
-              <footer-switch icon="sort-alpha-up" @updated="isSorting = $event"
+              <footer-switch icon="sort-alpha-up" @updated="listFormat.isSorting = $event"
                              class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
-              <footer-switch icon="dice-one" @updated="isUnique = $event"
+              <footer-switch icon="dice-one" @updated="listFormat.isUnique = $event"
                              class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
-              <div class="column is-1 box" style="text-align: center; margin-right: 12px !important">
-                <span class="marks has-background-white\t" style="padding:0 8px">{{ separatorMark }}</span>
+              <div class="column is-1 box  footer-item-wrapper" style="text-align: center; margin-right: 12px !important">
+                <span class="marks has-background-white\t" style="padding:0 8px">{{ listFormat.separatorMark }}</span>
               </div>
             </div>
           </div>
           <div class="column is-half is-paddingless">
             <div v-if="isNumeric">
-              <div class="box is-marginless is-pulled-right has-text-danger"
+              <div class="box is-marginless is-pulled-right has-text-danger  footer-item-wrapper"
                    style="text-align: center; margin-right: 12px !important">
                 sum:
                 {{ sum }}
               </div>
-              <div class="box is-marginless is-pulled-right has-text-danger"
+              <div class="box is-marginless is-pulled-right has-text-danger  footer-item-wrapper"
                    style="text-align: center; margin-right: 12px !important">
                 avg
                 {{ avg }}
@@ -58,9 +58,9 @@ Vue.component ('list-maker', {
         </a>
       </div>
       <footer class="card-footer columns ">
-        <footer-radio-menu :items="footer_opts.separator" @updated="separatorMark = $event"
+        <footer-radio-menu :items="footer_opts.separator" @updated="listFormat.separatorMark = $event"
                            class="column is-one-fifth"></footer-radio-menu>
-        <footer-radio-menu :items="footer_opts.quote" @updated="quoteMark = $event"
+        <footer-radio-menu :items="footer_opts.quote" @updated="listFormat.quoteMark = $event"
                            class="column is-one-fifth"></footer-radio-menu>
       </footer>
     </b-collapse>
@@ -70,11 +70,13 @@ Vue.component ('list-maker', {
   data() {
     return {
       text: "",
-      withQuote: false,
-      isUnique: false,
-      isSorting: false,
-      separatorMark: ",",
-      quoteMark: "'",
+      listFormat: {
+        withQuote: false,
+        isUnique: false,
+        isSorting: false,
+        separatorMark: ",",
+        quoteMark: "'",
+      },
       footer_opts: {
         separator: [{value: ',', label: ','}, {value: ';', label: ';'}, {value: '|', label: '|'}],
         quote: [{value: '\'', label: '\''}, {value: '"', label: '"'}]
@@ -90,15 +92,6 @@ Vue.component ('list-maker', {
   computed: {
     listData() {
       return this.text.split ("\n");
-    },
-    listFormat() {
-      return {
-        isUnique: this.isUnique,
-        withQuote: this.withQuote,
-        quoteMark: this.quoteMark,
-        isSorting: this.isSorting,
-        separatorMark: this.separatorMark,
-      }
     },
     isNumeric() {
       return this.listData.some (e => /^\d+$/.test (e))

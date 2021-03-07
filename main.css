@@ -6,7 +6,7 @@
     padding: 0 12px;
 }
 
-#list-maker .marks {
+ .marks {
     font-family: 'Coustard', serif;
     font-size: 18px;
 }
@@ -19,7 +19,7 @@
     height: 900px;
 }
 
-#list-maker #outp {
+#outp {
     height: 300px;
 }
 

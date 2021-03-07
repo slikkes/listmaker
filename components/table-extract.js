@@ -24,6 +24,17 @@ Vue.component ('table-extract', {
             </td>
           </tr>
           </tbody>
+          
+          <tfoot>
+          <tr>
+            <td v-for="(item, idx) in tableData.lines[0]"  :class="selectedCol === idx ? 'selectedCol' : ''">
+              <p v-if="selectedCol === idx">
+                Sum: {{selectedColSum}} <br>
+                Avg: {{selectedColAvg}}
+              </p>
+            </td>
+          </tr>
+          </tfoot>
         </table>
 
         <div class="column">
@@ -43,6 +54,20 @@ Vue.component ('table-extract', {
         <div class="card-header-title columns" @click="$event.stopPropagation()" style="     min-height: 120px;">
           <div class="column is-half" style="margin-top:12px">
             <div class="columns ">
+              <footer-switch :label="listFormat.quoteMark+ ' ' + listFormat.quoteMark"
+                             @updated="listFormat.withQuote = $event"
+                             class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
+              <footer-switch icon="sort-alpha-up" @updated="listFormat.isSorting = $event"
+                             class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
+              <footer-switch icon="dice-one" @updated="listFormat.isUnique = $event"
+                             class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
+              
+              <div class="column is-1 box footer-item-wrapper" style="text-align: center; margin-right: 12px !important">
+                <span class="marks has-background-white\t" style="padding:0 8px">{{
+                    listFormat.separatorMark
+                  }}</span>
+              </div>
+
               <footer-switch icon="heading" @updated="withHeader = $event"
                              class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
 
@@ -66,6 +91,11 @@ Vue.component ('table-extract', {
         </a>
       </div>
       <footer class="card-footer columns ">
+        <footer-radio-menu :items="footer_opts.separator" @updated="listFormat.separatorMark = $event"
+                           class="column is-one-fifth"></footer-radio-menu>
+        <footer-radio-menu :items="footer_opts.quote" @updated="listFormat.quoteMark = $event"
+                           class="column is-one-fifth"></footer-radio-menu>
+
         <footer-radio-menu :items="footer_opts.col" @updated="delimiters.col = $event"
                            class="column is-one-fifth"></footer-radio-menu>
         <footer-radio-menu :items="footer_opts.line" @updated="delimiters.line = $event"
@@ -94,8 +124,17 @@ Vue.component ('table-extract', {
       footer_opts: {
         col: [{value: '\t', label: '\\t'}, {value: ' ', label: 'space'}, {value: ',', label: ','}],
         line: [{value: '\n', label: '\\n'}],
+        separator: [{value: ',', label: ','}, {value: ';', label: ';'}, {value: '|', label: '|'}],
+        quote: [{value: '\'', label: '\''}, {value: '"', label: '"'}]
       },
       selectedCol: null,
+      listFormat: {
+        withQuote: false,
+        isUnique: false,
+        isSorting: false,
+        separatorMark: ",",
+        quoteMark: "'",
+      },
     }
   },
   computed: {
@@ -121,18 +160,20 @@ Vue.component ('table-extract', {
       return this.tableData.lines.reduce ((c, i) => {
         return [...c, i[this.selectedCol]];
       }, [])
-      
     },
-    listFormat() {
-      return {
-        withQuote: true,
-        quoteMark: "'"
-        /*isUnique: false,
-        withQuote: false,
-        isSorting: false,
-        separator_mark: '',*/
+    selectedColSum() {
+      if(this.selectedColData.length === 0){
+        return 0;
       }
+      return this.selectedColData.reduce ((c, i) => c + parseFloat (i), 0);
     },
+    selectedColAvg() {
+      if(this.selectedColData.length === 0){
+        return 0;
+      }
+      return this.selectedColSum / this.selectedColData.length;
+    },
+    
   },
   methods: {
     
@@ -144,15 +185,6 @@ Vue.component ('table-extract', {
     getLabel(type) {
       return this.footer_opts[type].find (i => i.value === this.delimiters[type])?.label;
     },
-    
-    getColSum(colNum) {
-      return this.getCols (colNum).reduce ((c, i) => c + parseFloat (i), 0);
-    },
-    
-    getColAvg(colNum) {
-      let col = this.getCols (colNum);
-      return col.reduce ((c, i) => c + parseFloat (i), 0) / col.length;
-    }
   },
   watch: {
     tableRaw: function (val) {
