@@ -35,3 +35,26 @@
 .selectedCol{
     background-color: rgb(164, 217, 111)
 }
+#table-extract{
+    background: repeating-linear-gradient(
+            45deg,
+            #606dbc,
+            #606dbc 10px,
+            #465298 10px,
+            #465298 20px
+    );
+}
+#list-maker{
+    background: repeating-linear-gradient(
+            45deg,
+            #689056,
+            #689056 10px,
+            #4c7231 10px,
+            #4c7231 20px
+    );
+
+}
+
+.footer-radio-menu input{
+    cursor:pointer !important
+}

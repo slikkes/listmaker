@@ -1,7 +1,7 @@
 Vue.component ('main-nav', {
   
   template: `
-    <div class="tabs is-boxed is-right">
+    <div class="tabs is-boxed is-right has-background-primary">
     <ul>
       <li v-for="item in items" :class="getItemClass(item)">
         <a @click="selectItem(item)">

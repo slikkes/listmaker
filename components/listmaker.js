@@ -2,7 +2,7 @@ Vue.component ('list-maker', {
   
   template: `
     <div id="list-maker">
-    <div class="columns is-fluid has-background-grey" style="padding:12px 10px">
+    <div class="columns is-fluid " style="padding:12px 10px">
       <div class="column is-one-fifth">
         <b-field>
           <b-input v-model="text" id="inp" type="textarea"></b-input>

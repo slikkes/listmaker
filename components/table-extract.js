@@ -1,7 +1,7 @@
 Vue.component ('table-extract', {
   template: `
     <div id="table-extract">
-    <div class="columns is-fluid has-background-grey" style="padding:12px 10px">
+    <div class="columns is-fluid has-background-warning-light" style="padding:12px 10px">
       <div class="column is-one-fifth">
         <b-field>
           <b-input v-model="tableRaw" id="inp" type="textarea"></b-input>
@@ -17,20 +17,22 @@ Vue.component ('table-extract', {
           </thead>
 
           <tbody>
-          <tr v-for="row in tableData.lines">
+          <tr v-for="(row, rowIdx ) in tableData.lines">
+            <td>{{ rowIdx + 1 }}</td>
             <td v-for="(field, idx) in row" @click="selectedCol = idx"
                 :class="selectedCol === idx ? 'selectedCol' : ''">
               {{ field }}
             </td>
           </tr>
           </tbody>
-          
+
           <tfoot>
-          <tr>
-            <td v-for="(item, idx) in tableData.lines[0]"  :class="selectedCol === idx ? 'selectedCol' : ''">
+          <tr class="is-grey">
+            <td></td>
+            <td v-for="(item, idx) in tableData.lines[0]" :class="selectedCol === idx ? 'selectedCol' : ''">
               <p v-if="selectedCol === idx">
-                Sum: {{selectedColSum}} <br>
-                Avg: {{selectedColAvg}}
+                Sum: {{ selectedColSum }} <br>
+                Avg: {{ selectedColAvg }}
               </p>
             </td>
           </tr>
@@ -61,9 +63,10 @@ Vue.component ('table-extract', {
                              class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
               <footer-switch icon="dice-one" @updated="listFormat.isUnique = $event"
                              class="column is-2 box is-marginless footer-item-wrapper"></footer-switch>
-              
-              <div class="column is-1 box footer-item-wrapper" style="text-align: center; margin-right: 12px !important">
-                <span class="marks has-background-white\t" style="padding:0 8px">{{
+
+              <div class="column is-1 box footer-item-wrapper"
+                   style="text-align: center; margin-right: 12px !important">
+                <span class="marks has-background-white" style="padding:0 8px">{{
                     listFormat.separatorMark
                   }}</span>
               </div>
@@ -96,9 +99,9 @@ Vue.component ('table-extract', {
         <footer-radio-menu :items="footer_opts.quote" @updated="listFormat.quoteMark = $event"
                            class="column is-one-fifth"></footer-radio-menu>
 
-        <footer-radio-menu :items="footer_opts.col" @updated="delimiters.col = $event"
+        <footer-radio-menu :items="footer_opts.col" @updated="delimiters.col = $event" :with-other-opt="true"
                            class="column is-one-fifth"></footer-radio-menu>
-        <footer-radio-menu :items="footer_opts.line" @updated="delimiters.line = $event"
+        <footer-radio-menu :items="footer_opts.line" @updated="delimiters.line = $event" :with-other-opt="true"
                            class="column is-one-fifth"></footer-radio-menu>
       </footer>
     </b-collapse>
@@ -165,13 +168,13 @@ Vue.component ('table-extract', {
       }, [])
     },
     selectedColSum() {
-      if(this.selectedCol === null){
+      if (this.selectedCol === null) {
         return 0;
       }
       return this.selectedColData.reduce ((c, i) => c + parseFloat (i), 0);
     },
     selectedColAvg() {
-      if(this.selectedCol === null){
+      if (this.selectedCol === null) {
         return 0;
       }
       return this.selectedColSum / this.selectedColData.length;
@@ -180,7 +183,8 @@ Vue.component ('table-extract', {
   },
   methods: {
     getLabel(type) {
-      return this.footer_opts[type].find (i => i.value === this.delimiters[type])?.label;
+      let label = this.footer_opts[type].find (i => i.value === this.delimiters[type])?.label;
+      return label ?? "reg";
     },
   },
   watch: {
