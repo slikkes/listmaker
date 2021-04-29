@@ -127,7 +127,7 @@ Vue.component ('table-extract', {
       footer_opts: {
         col: [{value: '\t', label: '\\t'}, {value: ' ', label: 'space'}, {value: ',', label: ','}],
         line: [{value: '\n', label: '\\n'}],
-        separator: [{value: ',', label: ','}, {value: ';', label: ';'}, {value: '|', label: '|'}],
+        separator: [{value: ',', label: ','}, {value: ';', label: ';'}, {value: '|', label: '|'}, {value: '\n', label: '\\n'}],
         quote: [{value: '\'', label: '\''}, {value: '"', label: '"'}]
       },
       selectedCol: null,

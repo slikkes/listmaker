@@ -78,7 +78,7 @@ Vue.component ('list-maker', {
         quoteMark: "'",
       },
       footer_opts: {
-        separator: [{value: ',', label: ','}, {value: ';', label: ';'}, {value: '|', label: '|'}],
+        separator: [{value: ',', label: ','}, {value: ';', label: ';'}, {value: '|', label: '|'}, {value: '\n', label: '\\n'}],
         quote: [{value: '\'', label: '\''}, {value: '"', label: '"'}]
       }
     }
